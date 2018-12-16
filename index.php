@@ -9,26 +9,30 @@
     <meta charset="utf-8">
     <title>Chat App</title>
     <link rel="stylesheet" href="styles.css" media="all">
+
+    <script type="text/javascript">
+      function ajax(){
+        var req = new XMLHttpRequest();
+
+        req.onreadystatechange = function(){
+          if(req.readyState == 4 && req.status == 200){
+            document.getElementById('chat').innerHTML = req.responseText;
+          }
+        }
+
+        req.open('GET','chat.php',true);
+        req.send();
+      }
+
+      setInterval(function(){ajax()},1000);
+
+    </script>
   </head>
-  <body>
+  <body onload="ajax();">
+
     <div class="container">
       <div class="chat_box">
-
-        <?php
-          $query = "SELECT * FROM chat ORDER BY id DESC";
-          $run = $conn->query($query);
-
-          while($row = $run-> fetch_array()) :
-         ?>
-
-        <div class="chat_data">
-          <span id="chatName"><?php echo $row['name']; ?></span> :
-          <span id="chatMessage"><?php echo $row['message']; ?></span>
-          <span id="chatTime"><?php echo formatDate($row['date']); ?></span>
-        </div>
-
-      <?php endwhile; ?>
-
+        <div id="chat"></div>
       </div>
 
       <form class="" action="index.php" method="post">
